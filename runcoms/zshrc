@@ -11,3 +11,27 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+
+DEFAULT_USER=damiand@kainos.com
+
+prompt_dir() {
+  if (( $+functions[shrink_path] )); then
+    prompt_segment blue $PRIMARY_FG " $(shrink_path -t -l) "
+  else
+    prompt_segment blue $PRIMARY_FG ' %~ '
+  fi
+}
+
+# Add additional completions
+fpath=(~/.zsh/completion $fpath)
+
+# Enable 'direnv'
+eval "$(direnv hook zsh)"
+
+# Kubernetes: add aliases and kubectl completions
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
+
+alias k=kubectl
+alias kns=kubens
